@@ -101,9 +101,9 @@ shinyServer(function(input, output) {
             gamma <- par[2]
             N<-S+I+R
             
-            dS<--beta*S*I/N
-            dI<-beta*S*I/N-gamma*I
-            dR<-gamma*I
+            dS<- -beta*S*I/N
+            dI<- beta*S*I/N-gamma*I
+            dR<- gamma*I
             return(list(c(dS,dI,dR)))
         }
         
