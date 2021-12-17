@@ -11,11 +11,13 @@
 # SI - 2 sliders ( I0 (0-10), beta (0-10))
 # SIS - 3 sliders (I0 (0-10), beta (0-10),gamma (0-10))
 # SIR - 3 sliders (I0 (0-10), beta (0-10),gamma (0-10))
+# SIR(Array with age group) - 3 sliders (I0 (0-10), beta (0-10),gamma (0-10))
 # SIRS - 4 sliders (I0 (0-10), beta (0-10),gamma (0-10), omega (0-10))
 # SEIR - 4 sliders (I0 (0-10), beta (0-10),gamma (0 -10),nui (0-10)) 
 # SEIRS - 5 sliders (I0 (0-10), beta (0-10),gamma (0 -10),nui (0-10), omega (0-10))
 
 library(shiny)
+library(shinybusy)
 
 # colorBox <- function(color, text=""){
 # #     div(
@@ -108,6 +110,43 @@ shinyUI(fluidPage(
                         plotOutput("SIR"),
                  )
                  ),
+        # SIR2(Array with age group) - 3 sliders (I0 (0-10), beta (0-10),gamma (0-10))
+        tabPanel("SIR (Array with age group)",
+                 column(4,
+                        sliderInput("I01_SIR2", 
+                                    "I0-1(age 0 - 18) : ",
+                                    min = 0.001, max = 0.01, value = 0.001,step  = 0.001
+                        ),
+                        sliderInput("I02_SIR2", 
+                                    "I0-2(age 18 - 60) : ",
+                                    min = 0.001, max = 0.01, value = 0.001,step  = 0.001
+                        ),
+                        sliderInput("I03_SIR2", 
+                                    "I0-3(age 60+) : ",
+                                    min = 0.001, max = 0.01, value = 0.001,step  = 0.001
+                        ),
+                        sliderInput("beta1_SIR2", 
+                                    "Beta(β)(age 0 - 18) : ",
+                                    min = 0, max = 10, value = 3
+                        ),
+                        sliderInput("beta2_SIR2", 
+                                    "Beta(β)(age 18 - 60) : ",
+                                    min = 0, max = 10, value = 9
+                        ),
+                        sliderInput("beta3_SIR2", 
+                                    "Beta(β)(age 60+) : ",
+                                    min = 0, max = 10, value = 2
+                        ),
+                        sliderInput("gamma_SIR2", 
+                                    "Gamma(γ) : ",
+                                    min = 0.0001, max = 0.001, value = 0.0002,step  = 0.0001
+                        ),
+                 ),
+                 column(8,
+                        add_busy_bar(color = "#FF0000"),
+                        plotOutput("SIR2"),
+                 )
+        ),
         # SIRS - 4 sliders (I0 (0-10), beta (0-10),gamma (0-10), omega (0-10))
         tabPanel("SIRS",
                  column(4,

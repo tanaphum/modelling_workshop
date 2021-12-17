@@ -9,6 +9,14 @@
 
 library(shiny)
 library(deSolve)
+library(tidyr)
+library(reshape)
+library(magrittr)
+library(plyr)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(shinybusy)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -128,6 +136,126 @@ shinyServer(function(input, output) {
         points(det.t,det.I,type='l',col='red',lwd=3)
         points(det.t,det.R,type='l',col='blue',lwd=3)
         legend("right",legend=c("S","I","R"),col=c('green','red','blue'),lty=rep(1,3),cex = 1.5,lwd = 2)
+    })
+    # 
+    # #-----------------------------
+    # 
+    
+    output$SIR2 <- renderPlot({
+      
+      #SIR Deterministic Model
+      
+      ageGroup <- 3  #number of age classes
+      n <- c(18,42,15)/75 # fraction in each age class (assumption that life expectancy is 75 years)
+      S0 <- c(0.05,0.01,0.008) # inital value for number of susceptible
+      I0 <- c(input$I01_SIR2,input$I02_SIR2,input$I03_SIR2) # inital value for number of infectious
+      R0 <- c(0, 0, 0) # inital value for number of recovered
+      ND <- 365 # time to simulate
+      beta <- matrix(c(input$beta1_SIR2, input$beta1_SIR2, input$beta1_SIR2,
+                       input$beta2_SIR2, input$beta2_SIR2, input$beta2_SIR2,
+                       input$beta3_SIR2, input$beta3_SIR2, input$beta3_SIR2 ), nrow=3, ncol=3)/200 # matrix of transmission rates
+
+      gamma <- input$gamma_SIR2 # recovery rate
+      TS <- 1 # time step to simualte is days
+      
+      # combining parameter and initial values
+      parms <- list( beta=beta, gamma=gamma)
+      INPUT <- c(S0, I0, R0)
+      
+      # constructing time vector
+      t_start <- 0 # starting time
+      t_end <- ND - 1 # ending time
+      t_inc <- TS #time increment
+      t_range <- seq(from= t_start, to=t_end+t_inc, by=t_inc) # vector with time steps
+      
+      # differential equations
+      # RES = lsoda(INPUT, t_range, diff_eqs, parms)
+      diff_eqs_sir <- function(times, Input, parms){
+        dY <- numeric(length(Input))
+        with(parms,{
+          # creates an empty matrix
+          for(i in 1:ageGroup){
+            dY[i] <- -beta[,i]%*%Input[ageGroup + seq(1:ageGroup)] * Input[ageGroup + i]  # S_i
+            dY[ageGroup+i] <- beta[,i] %*% Input[ageGroup + seq(1:ageGroup)] *Input[ageGroup + i] - gamma * Input[ageGroup + i]  #I_i
+            dY[2*ageGroup+i] <- gamma * Input[ageGroup+i]   #R_i
+          }
+          list(dY)
+        })
+      }
+      
+      RES2_sir=rep(0,10)
+      
+      number_years <- 100 #set the number of years to simulate
+      
+      # initialize the loop
+      k=1
+      # yearly ageing
+      for(k in 1:number_years) {
+        RES = lsoda(INPUT, t_range, diff_eqs_sir, parms)
+        #taking the last entry as the the new input that then is propagated accoring to the aging
+        INPUT=RES[366,-1]
+        # EX
+        # AGE 4 groups
+        # "1" = "0-6 years " 6 years
+        # "2" = "6-10 years " 4 years
+        # "3" = "10-20 years " 10 years
+        # "4" = "20+ years "
+        # INPUT[16]=INPUT[16]+INPUT[15]/10
+        # INPUT[15]=INPUT[15]+INPUT[14]/4-INPUT[15]/10
+        # INPUT[14]=INPUT[14]+INPUT[13]/6-INPUT[14]/4
+        # INPUT[13]=INPUT[13]-INPUT[13]/6
+        
+        
+        # AGE 3 groups
+        # "1" = "0-18 years " 18 years
+        # "2" = "18-60 years " 42 years
+        # "3" = "60++ years "
+        #S
+        INPUT[1]=INPUT[1] - INPUT[1]/18
+        INPUT[2]=INPUT[2] - INPUT[2]/42 + INPUT[1]/18
+        INPUT[3]=INPUT[3] + INPUT[2]/42
+        #I
+        INPUT[4]=INPUT[4] - INPUT[4]/18
+        INPUT[5]=INPUT[5] - INPUT[5]/42 + INPUT[4]/18
+        INPUT[6]=INPUT[6] + INPUT[5]/42
+        #R
+        INPUT[7]=INPUT[7] - INPUT[7]/18
+        INPUT[8]=INPUT[8] - INPUT[8]/42 + INPUT[7]/18
+        INPUT[9]=INPUT[9] + INPUT[8]/42
+        
+        RES2_sir <- rbind(RES2_sir,RES)
+        k=k+1
+      }
+      
+      #rescaling time to years
+      time <- seq(from=0, to=100*(ND+1))/(ND+1)
+      # changing time to the rescaled time
+      RES2_sir[ ,"time"] <- time
+      
+      #labeling of the output from ODE solver
+      label_sir <- c("S1", "S2", "S3", "I1", "I2", "I3", "R1", "R2", "R3")
+      label1_sir <- substr(label_sir, 1, 1)
+      Age_sir <- substr(label_sir, 2, 2)
+      
+      df <- data.frame(time = RES2_sir[, 1],
+                       label1_sir = rep(label1_sir, each =  nrow(RES2_sir)),
+                       Age = rep(Age_sir, each =  nrow(RES2_sir)),
+                       value = c(RES2_sir[, -1]))
+      
+      #plotting  the data
+      df$label1 <- factor(df$label1, levels = c("S","I","R"))
+      df$Age <- factor(df$Age)
+      df %>% mutate(label1 = recode(label1, S = "Susceptible")) %>%
+        mutate(label1 = recode(label1, I = "Infectious")) %>%
+        mutate(label1 = recode(label1, R = "Recovered"))  %>%
+        mutate(Age = recode(Age, "1" = "0-18 years ")) %>%
+        mutate(Age = recode(Age, "2" = "18-60 yearss ")) %>%
+        mutate(Age = recode(Age, "3" = "60+ years ")) %>%
+        ggplot() +
+        geom_line(aes(x = time, y = value, color = Age)) +
+        facet_wrap( ~label1, ncol=1, scales =  "free_y")+
+        xlab("Time (years)") + ylab(" Individuals")
+      
     })
     # 
     # #-----------------------------
