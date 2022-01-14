@@ -115,31 +115,31 @@ shinyUI(fluidPage(
                  column(4,
                         sliderInput("I01_SIR2", 
                                     "I0-1(age 0 - 18) : ",
-                                    min = 0.001, max = 0.01, value = 0.001,step  = 0.001
+                                    min = 0.0001, max = 0.0015, value = 0.001,step  = 0.0001
                         ),
                         sliderInput("I02_SIR2", 
                                     "I0-2(age 18 - 60) : ",
-                                    min = 0.001, max = 0.01, value = 0.001,step  = 0.001
+                                    min = 0.0001, max = 0.0015, value = 0.001,step  = 0.0001
                         ),
                         sliderInput("I03_SIR2", 
                                     "I0-3(age 60+) : ",
-                                    min = 0.001, max = 0.01, value = 0.001,step  = 0.001
+                                    min = 0.0001, max = 0.0015, value = 0.001,step  = 0.0001
                         ),
                         sliderInput("beta1_SIR2", 
                                     "Beta(β)(age 0 - 18) : ",
-                                    min = 0, max = 10, value = 3
+                                    min = 0, max = 8, value = 3
                         ),
                         sliderInput("beta2_SIR2", 
                                     "Beta(β)(age 18 - 60) : ",
-                                    min = 0, max = 10, value = 9
+                                    min = 0, max = 8, value = 8
                         ),
                         sliderInput("beta3_SIR2", 
                                     "Beta(β)(age 60+) : ",
-                                    min = 0, max = 10, value = 2
+                                    min = 0, max = 8, value = 2
                         ),
                         sliderInput("gamma_SIR2", 
                                     "Gamma(γ) : ",
-                                    min = 0.0001, max = 0.001, value = 0.0002,step  = 0.0001
+                                    min = 0.0002, max = 0.001, value = 0.0002,step  = 0.0001
                         ),
                  ),
                  column(8,

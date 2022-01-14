@@ -147,7 +147,7 @@ shinyServer(function(input, output) {
       
       ageGroup <- 3  #number of age classes
       n <- c(18,42,15)/75 # fraction in each age class (assumption that life expectancy is 75 years)
-      S0 <- c(0.05,0.01,0.008) # inital value for number of susceptible
+      S0 <- c(0.1,0.15,0.08) # inital value for number of susceptible
       I0 <- c(input$I01_SIR2,input$I02_SIR2,input$I03_SIR2) # inital value for number of infectious
       R0 <- c(0, 0, 0) # inital value for number of recovered
       ND <- 365 # time to simulate

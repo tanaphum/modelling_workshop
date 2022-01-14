@@ -1,0 +1,14 @@
+name: modelling_workshop
+title: modelling_workshop
+username:
+account: sisconlolicon
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4192262
+bundleId: 5382958
+url: https://sisconlolicon.shinyapps.io/modelling_workshop/
+when: 1639718771.73299
+lastSyncTime: 1639718771.73299
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: README.md
