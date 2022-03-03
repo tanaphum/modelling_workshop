@@ -59,7 +59,7 @@ shinyUI(fluidPage(
                  ),
                  sliderInput("beta_SI", 
                              "Beta(β) : ",
-                             min = 0, max = 10, value = 1
+                             min = 0, max = 10, value = 1,step = 0.1
                  ),
                  tags$img(src="SI.png"),
                  ),
@@ -77,7 +77,7 @@ shinyUI(fluidPage(
                  ),
                  sliderInput("beta_SIS", 
                              "Beta(β) : ",
-                             min = 0, max = 10, value = 3
+                             min = 0, max = 10, value = 3,step = 0.1
                  ),
                  sliderInput("gamma_SIS", 
                              "Gamma(γ) : ",
@@ -98,7 +98,7 @@ shinyUI(fluidPage(
                  ),
                  sliderInput("beta_SIR", 
                              "Beta(β) : ",
-                             min = 0, max = 10, value = 3
+                             min = 0, max = 10, value = 3,step = 0.1
                  ),
                  sliderInput("gamma_SIR", 
                              "Gamma(γ) : ",
@@ -127,15 +127,15 @@ shinyUI(fluidPage(
                         ),
                         sliderInput("beta1_SIR2", 
                                     "Beta(β)(age 0 - 18) : ",
-                                    min = 0, max = 8, value = 3
+                                    min = 0, max = 8, value = 3,step = 0.1
                         ),
                         sliderInput("beta2_SIR2", 
                                     "Beta(β)(age 18 - 60) : ",
-                                    min = 0, max = 8, value = 8
+                                    min = 0, max = 8, value = 8,step = 0.1
                         ),
                         sliderInput("beta3_SIR2", 
                                     "Beta(β)(age 60+) : ",
-                                    min = 0, max = 8, value = 2
+                                    min = 0, max = 8, value = 2,step = 0.1
                         ),
                         sliderInput("gamma_SIR2", 
                                     "Gamma(γ) : ",
@@ -156,7 +156,7 @@ shinyUI(fluidPage(
                  ),
                  sliderInput("beta_SIRS", 
                              "Beta(β) : ",
-                             min = 0, max = 10, value = 6
+                             min = 0, max = 10, value = 6,step = 0.1
                  ),
                  sliderInput("gamma_SIRS", 
                              "Gamma(γ) : ",
@@ -181,7 +181,7 @@ shinyUI(fluidPage(
                  ),
                  sliderInput("beta_SEIR", 
                              "Beta(β) : ",
-                             min = 0, max = 10, value = 6
+                             min = 0, max = 10, value = 6,step = 0.1
                  ),
                  sliderInput("gamma_SEIR", 
                              "Gamma(γ) : ",
@@ -206,7 +206,7 @@ shinyUI(fluidPage(
                  ),
                  sliderInput("beta_SEIRS", 
                              "Beta(β) : ",
-                             min = 0, max = 10, value = 6
+                             min = 0, max = 10, value = 6,step = 0.1
                  ),
                  sliderInput("gamma_SEIRS", 
                              "Gamma(γ) : ",
@@ -236,7 +236,7 @@ shinyUI(fluidPage(
                         ),
                         sliderInput("beta_SEIR2", 
                                     "Beta(β) : ",
-                                    min = 0, max = 10, value = 7
+                                    min = 0, max = 10, value = 7,step = 0.1
                         ),
                         sliderInput("gamma_SEIR2", 
                                     "Gamma(γ) : ",
@@ -269,7 +269,7 @@ shinyUI(fluidPage(
                         ),
                         sliderInput("beta_SEIRS2", 
                                     "Beta(β) : ",
-                                    min = 0, max = 10, value = 7
+                                    min = 0, max = 10, value = 7,step = 0.1
                         ),
                         sliderInput("gamma_SEIRS2", 
                                     "Gamma(γ) : ",
