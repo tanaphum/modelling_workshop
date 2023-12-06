@@ -20,21 +20,22 @@ library(shinybusy)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-
+  
+  SI.dyn <- function(t,var,par) {
+    S <- var[1]
+    I <- var[2]
     
+    beta <- par[1]
+    N<-S+I
+    
+    dS<--beta*S*I/N
+    dI<-beta*S*I/N
+    return(list(c(dS,dI)))
+  }
+
     output$SI <- renderPlot({
         #SI Deterministic Model
-        SI.dyn <- function(t,var,par) {
-            S <- var[1]
-            I <- var[2]
 
-            beta <- par[1]
-            N<-S+I
-            
-            dS<--beta*S*I/N
-            dI<-beta*S*I/N
-            return(list(c(dS,dI)))
-        }
         
         beta <- input$beta_SI
         I0 <- input$I0_SI
